@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.2/axios.min.js"
+        integrity="sha512-JSCFHhKDilTRRXe9ak/FJ28dcpOJxzQaCd3Xg8MyF6XFjODhy/YMCM8HW0TFDckNHWUewW+kfvhin43hKtJxAw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+    Login Form
+    <div>
+        <input type="text" name="email" id="email">
+        <input type="password" name="password" id="password">
+        <button type="submit" onclick="loginV3()">Login</button>
+    </div>
+
+    <button type="button" onclick="getUsers()">Get users</button>
+
+    <script>
+        async function loginV1() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('http://localhost:8000/v1/api/login', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const user = await response.json();
+
+            // store to local storage
+            localStorage.setItem('token', user.data);
+
+            console.log(user);
+        }
+
+        async function loginV2() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('http://localhost:8000/v2/api/login', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                }),
+                credentials: 'include'
+            });
+
+            const user = await response.json();
+            console.log(user);
+        }
+
+        async function loginV3() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const response = await fetch('http://localhost:8000/v3/api/login', {
+                method: 'post',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                }),
+                credentials: 'include'
+            });
+
+            const user = await response.json();
+            console.log(user);
+        }
+
+        async function getUsers() {
+            // const authToken = localStorage.getItem('token');
+            const users = await fetch('http://localhost:8000/api/users', {
+                method: 'get',
+                headers: {
+                    'Content-Type': 'application/json',
+                    //'Authorization': `Bearer ${authToken}`
+                },
+                credentials: 'include',
+            }).then((response) => {
+                return response.json();
+            });
+
+            console.log(users);
+        }
+
+    </script>
+</body>
+
+</html>
